@@ -1,0 +1,22 @@
+// exam_file_53.txt
+int main()
+ { 
+ 	int i;
+	int j;
+	int a, b, c, d; // user inputs
+	int g, h; // led outputs
+	for (i = a; i < a+103 ; i++)
+	{
+		for (j = 3; j < 106; j++)
+		{
+			if(is_prime(b))
+			{
+				g = sum_max_min(c,a,b,b);
+			}
+			else
+			{
+				h = nib_swap(a);
+			}
+		}
+	}
+}

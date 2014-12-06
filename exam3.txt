@@ -1,0 +1,115 @@
+module your_exam_module(clk, rst, a, b, c, d, g, h, start, done);
+
+input clk, rst;
+input [15:0]a;
+input [15:0]b;
+input [15:0]c;
+input [15:0]d;
+output [15:0]g;
+output [15:0]h;
+reg [15:0]g;
+reg [15:0]h;
+input start;
+output done;
+reg done;
+
+wire [1:0]isprime;
+
+
+reg [15:0] primecounter;
+reg [16:0] i;
+reg [15:0] j;
+reg [15:0] transition
+reg [3:0] state
+reg [3:0] next_state
+
+parameter ready = 3’b000, check_prime = 3’b001, sum = 3’b010, nib = 3’b011, complete = 3’b100
+
+always @(posedge clk or negedge rst)
+begin
+	if (rst == 1'b0)
+	begin
+		g <= 16'd0;
+		h <= 16'd0;
+		done <= 1'b0;
+		state<= ready;
+		primecounter = 16'd2
+ 		i <=a;
+		j <=3;
+	end
+	else
+	begin
+		case: (state)
+			
+			ready: begin
+				if (start ==1'b1) begin
+					state <= next_state;
+					done <= 1'b0;
+				else state <= state;
+			end
+			
+			check_prime: begin
+				
+				if (primecounter == b)
+					state <=sum;			
+				else if (b%primecounter == 0)
+					state <= nib;	
+				else begin
+				     	primecounter = primecounter+1;	
+				     	state = state;
+				     end
+
+			end
+			
+			sum: begin
+				if (a<=c && a<=b)
+					if (b<=c)
+						g <= a + c; //abc
+					else g <= a + b; //acb
+				else if (a<=c && a>=b) //bac
+					g <= b + a;
+				else if (a>=c) 
+					if (a>= b && c>=b) g <= b + a; //bca
+					else if (a>=b && c<=b) g<= c + a; //cba
+				else g <= c+b; //cab
+							
+			end
+			
+			nib: begin
+			if (i== a + 16'd103) begin
+				if (j == 106) state <= next_state
+				else begin
+					transition<= {a[15], a[14], a[13], a[12], a[11], a[10], a[9], a[8], a[7], a[6], a[5], a[4], a[3], a[2], a[1], a[0]};
+					a <= transition;
+					j <= j + 1;
+				     end
+			else begin
+				transition<= {a[15], a[14], a[13], a[12], a[11], a[10], a[9], a[8], a[7], a[6], a[5], a[4], a[3], a[2], a[1], a[0]};
+				a <= transition;
+				i <= i+1;
+			end	
+			end
+			end
+			
+			complete:
+				done <= 1'b1; 
+				state <=next_state
+			
+		endcase
+	end
+end
+
+always @ (*)
+	case (state)
+	ready: next_state = check_prime;
+	sum: next_state = complete;
+	nib: next_state = complete;
+	complete: next_state = ready;
+	default: next_state = ready;
+	endcase
+end
+endmodule
+
+
+
+
